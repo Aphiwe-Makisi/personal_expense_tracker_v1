@@ -60,11 +60,11 @@ func exitApp() {
 	}
 
 	for {
-		if strings.ToLower(confirmation) == "y" {
+		if strings.ToLower(strings.TrimSpace(confirmation)) == "y" {
 			clearTerminal()
 			fmt.Println(farewellMsg)
 			return
-		} else if strings.ToLower(confirmation) == "n" {
+		} else if strings.ToLower(strings.TrimSpace(confirmation)) == "n" {
 			isGreetingDisplayed = false
 			clearTerminal()
 			main()
