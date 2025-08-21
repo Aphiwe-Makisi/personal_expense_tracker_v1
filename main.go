@@ -24,6 +24,10 @@ func main() {
 	fmt.Scanln(&menuOption)
 
 	switch menuOption {
+	case 1:
+		clearTerminal()
+		addExpense()
+		break
 	case 6:
 		exitApp()
 		break
@@ -41,6 +45,53 @@ MENU
 5. Clear All Data
 6. Exit
 `)
+}
+
+func addExpense() {
+	var amount float32
+	var category, name, confirmation string
+
+	fmt.Print("Enter expense name: ")
+	if _, err := fmt.Scanln(&name); err != nil {
+		fmt.Println("Error: %v", err)
+		return
+	}
+
+	fmt.Print("Enter expense amount: ")
+	if _, err := fmt.Scanln(&amount); err != nil {
+		fmt.Println("Error: %v", err)
+		return
+	}
+
+	fmt.Print("Enter expense category: ")
+	if _, err := fmt.Scanln(&category); err != nil {
+		fmt.Println("Error: %v", err)
+		return
+	}
+
+	// TODO: Add to lists
+
+	clearTerminal()
+	fmt.Printf("✅ Successfully added %v.\n", strings.TrimSpace(name))
+
+	for {
+		fmt.Print("Do you want to add another one? (y/n): ")
+		fmt.Scanln(&confirmation)
+		var c = strings.TrimSpace(strings.ToLower(confirmation))
+
+		if c == "y" {
+			clearTerminal()
+			addExpense()
+		} else if c == "n" {
+			clearTerminal()
+			main()
+			break
+		} else {
+			clearTerminal()
+			main()
+			break
+		}
+	}
 }
 
 func exitApp() {
