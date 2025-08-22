@@ -9,6 +9,7 @@ import (
 )
 
 var isGreetingDisplayed bool = true
+var expenses = []map[string]interface{}{}
 
 func main() {
 	// Entry point
@@ -56,13 +57,13 @@ func addExpense() {
 
 		fmt.Print("Enter expense name: ")
 		if _, err := fmt.Scanln(&name); err != nil {
-			fmt.Println("Error: %v", err)
+			fmt.Printf("Error: %v\n", err)
 			return
 		}
 
 		fmt.Print("Enter expense amount: ")
 		if _, err := fmt.Scanln(&amount); err != nil {
-			fmt.Println("Error: %v", err)
+			fmt.Printf("Error: %v\n", err)
 			return
 		}
 
@@ -74,14 +75,15 @@ func addExpense() {
 
 		fmt.Print("Enter expense category: ")
 		if _, err := fmt.Scanln(&category); err != nil {
-			fmt.Println("Error: %v", err)
+			fmt.Printf("Error: %v\n", err)
 			return
 		}
 
-		// TODO: Add to lists
-		// amounts = append(amounts, amount)
-		// categories = append(categories, category)
-		// names = append(names, name)
+		expenses = append(expenses, map[string]interface{}{
+			"category": category,
+			"amount":   amount,
+			"name":     name,
+		})
 
 		clearTerminal()
 		fmt.Printf("✅ Successfully added %v.\n", strings.TrimSpace(name))
@@ -102,6 +104,10 @@ func addExpense() {
 			}
 		}
 	}
+}
+
+func viewAllExpenses() {
+
 }
 
 func exitApp() {
