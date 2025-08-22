@@ -17,20 +17,22 @@ func main() {
 	if isGreetingDisplayed {
 		fmt.Println("=== Hello 👋! Welcome to Expense Tracker. ===")
 	}
-	displayMenu()
+	for {
+		displayMenu()
 
-	// program flow
-	fmt.Print("Choose from the menu: ")
-	fmt.Scanln(&menuOption)
+		// program flow
+		fmt.Print("Choose from the menu: ")
+		fmt.Scanln(&menuOption)
 
-	switch menuOption {
-	case 1:
-		clearTerminal()
-		addExpense()
-		break
-	case 6:
-		exitApp()
-		break
+		switch menuOption {
+		case 1:
+			clearTerminal()
+			addExpense()
+			break
+		case 6:
+			exitApp()
+			return
+		}
 	}
 }
 
@@ -48,48 +50,56 @@ MENU
 }
 
 func addExpense() {
-	var amount float32
-	var category, name, confirmation string
-
-	fmt.Print("Enter expense name: ")
-	if _, err := fmt.Scanln(&name); err != nil {
-		fmt.Println("Error: %v", err)
-		return
-	}
-
-	fmt.Print("Enter expense amount: ")
-	if _, err := fmt.Scanln(&amount); err != nil {
-		fmt.Println("Error: %v", err)
-		return
-	}
-
-	fmt.Print("Enter expense category: ")
-	if _, err := fmt.Scanln(&category); err != nil {
-		fmt.Println("Error: %v", err)
-		return
-	}
-
-	// TODO: Add to lists
-
-	clearTerminal()
-	fmt.Printf("✅ Successfully added %v.\n", strings.TrimSpace(name))
-
 	for {
-		fmt.Print("Do you want to add another one? (y/n): ")
-		fmt.Scanln(&confirmation)
-		var c = strings.TrimSpace(strings.ToLower(confirmation))
+		var amount float32
+		var category, name, confirmation string
 
-		if c == "y" {
+		fmt.Print("Enter expense name: ")
+		if _, err := fmt.Scanln(&name); err != nil {
+			fmt.Println("Error: %v", err)
+			return
+		}
+
+		fmt.Print("Enter expense amount: ")
+		if _, err := fmt.Scanln(&amount); err != nil {
+			fmt.Println("Error: %v", err)
+			return
+		}
+
+		if amount <= 0 {
 			clearTerminal()
-			addExpense()
-		} else if c == "n" {
-			clearTerminal()
-			main()
-			break
-		} else {
-			clearTerminal()
-			main()
-			break
+			fmt.Println("Amount must be greater than 0")
+			continue
+		}
+
+		fmt.Print("Enter expense category: ")
+		if _, err := fmt.Scanln(&category); err != nil {
+			fmt.Println("Error: %v", err)
+			return
+		}
+
+		// TODO: Add to lists
+		// amounts = append(amounts, amount)
+		// categories = append(categories, category)
+		// names = append(names, name)
+
+		clearTerminal()
+		fmt.Printf("✅ Successfully added %v.\n", strings.TrimSpace(name))
+
+		for {
+			fmt.Print("Do you want to add another one? (y/n): ")
+			fmt.Scanln(&confirmation)
+			var c = strings.TrimSpace(strings.ToLower(confirmation))
+
+			if c == "y" {
+				clearTerminal()
+				break
+			} else if c == "n" {
+				clearTerminal()
+				return
+			} else {
+				fmt.Println("Please enter 'y' for yes or 'n' for no.")
+			}
 		}
 	}
 }
