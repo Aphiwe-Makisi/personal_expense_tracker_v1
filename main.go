@@ -29,7 +29,8 @@ func main() {
 		case 1:
 			clearTerminal()
 			addExpense()
-			break
+		case 2:
+			viewAllExpenses()
 		case 6:
 			exitApp()
 			return
@@ -80,9 +81,9 @@ func addExpense() {
 		}
 
 		expenses = append(expenses, map[string]interface{}{
-			"category": category,
+			"category": strings.TrimSpace(category),
 			"amount":   amount,
-			"name":     name,
+			"name":     strings.TrimSpace(name),
 		})
 
 		clearTerminal()
@@ -107,7 +108,26 @@ func addExpense() {
 }
 
 func viewAllExpenses() {
+	clearTerminal()
 
+	if len(expenses) == 0 {
+		fmt.Println("=== You have not expenses added. ===\n\n")
+		return
+	}
+
+	var total float32
+
+	fmt.Println("============= All Expenses =============\n")
+	for i, e := range expenses {
+		if amount, ok := e["amount"].(float32); ok {
+			total += amount
+		}
+		fmt.Printf("%v. %v -- R%.2f [%v]\n", i+1, e["name"], e["amount"], e["category"])
+	}
+
+	fmt.Println("\n=========================================")
+	fmt.Printf("Total: %v\n", total)
+	fmt.Println("=========================================")
 }
 
 func exitApp() {
