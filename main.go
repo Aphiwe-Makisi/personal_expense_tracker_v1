@@ -33,6 +33,8 @@ func main() {
 			viewAllExpenses()
 		case 3:
 			viewByCategory()
+		case 4:
+			viewSummary()
 		case 6:
 			exitApp()
 			return
@@ -148,6 +150,11 @@ func viewByCategory() {
 	}
 
 	for cat, items := range c {
+		s := "item"
+		if len(items) >= 2 {
+			s = "items"
+		}
+
 		fmt.Printf("--- %s ---\n", cat)
 		ct := 0.0
 		for _, e := range items {
@@ -155,7 +162,7 @@ func viewByCategory() {
 			fmt.Printf("• %v - R%.2f\n", e["name"], e["amount"])
 		}
 		fmt.Println("==================================================")
-		fmt.Printf("Subtotal: R%.2f", ct)
+		fmt.Printf("Subtotal: R%.2f (%v %s)", ct, len(items), s)
 		fmt.Println("\n==================================================")
 	}
 }
