@@ -31,6 +31,8 @@ func main() {
 			addExpense()
 		case 2:
 			viewAllExpenses()
+		case 3:
+			viewByCategory()
 		case 6:
 			exitApp()
 			return
@@ -53,7 +55,7 @@ MENU
 
 func addExpense() {
 	for {
-		var amount float32
+		var amount float64
 		var category, name, confirmation string
 
 		fmt.Print("Enter expense name: ")
@@ -111,7 +113,7 @@ func viewAllExpenses() {
 	clearTerminal()
 
 	if len(expenses) == 0 {
-		fmt.Println("=== You have not expenses added. ===\n\n")
+		fmt.Println("=== You have no expenses added. ===\n\n")
 		return
 	}
 
@@ -128,6 +130,36 @@ func viewAllExpenses() {
 	fmt.Println("\n=========================================")
 	fmt.Printf("Total: %v\n", total)
 	fmt.Println("=========================================")
+}
+
+func viewByCategory() {
+	clearTerminal()
+
+	c := make(map[string][]map[string]interface{})
+
+	for _, e := range expenses {
+		ec := e["category"].(string)
+		c[ec] = append(c[ec], e)
+	}
+
+	var s float64
+	fmt.Println("=============== View by Category =================\n")
+	if len(c) == 0 {
+		fmt.Println("You have no expenses added.\n")
+	}
+
+	for cat, items := range c {
+		fmt.Printf("--- %s ---\n", cat)
+
+		for _, e := range items {
+			s += e["amount"].(float64)
+			fmt.Printf("• %v - R%.2f\n", e["name"], e["amount"])
+		}
+		fmt.Println("")
+	}
+	fmt.Println("==================================================")
+	fmt.Printf("Subtotal: R%.2f", s)
+	fmt.Println("\n==================================================")
 }
 
 func exitApp() {
