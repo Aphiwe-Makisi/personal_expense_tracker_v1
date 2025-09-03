@@ -142,7 +142,6 @@ func viewByCategory() {
 		c[ec] = append(c[ec], e)
 	}
 
-	var s float64
 	fmt.Println("=============== View by Category =================\n")
 	if len(c) == 0 {
 		fmt.Println("You have no expenses added.\n")
@@ -150,16 +149,20 @@ func viewByCategory() {
 
 	for cat, items := range c {
 		fmt.Printf("--- %s ---\n", cat)
-
+		ct := 0.0
 		for _, e := range items {
-			s += e["amount"].(float64)
+			ct += e["amount"].(float64)
 			fmt.Printf("• %v - R%.2f\n", e["name"], e["amount"])
 		}
-		fmt.Println("")
+		fmt.Println("==================================================")
+		fmt.Printf("Subtotal: R%.2f", ct)
+		fmt.Println("\n==================================================")
 	}
-	fmt.Println("==================================================")
-	fmt.Printf("Subtotal: R%.2f", s)
-	fmt.Println("\n==================================================")
+}
+
+func viewSummary() {
+	clearTerminal()
+	fmt.Println("=== Expense Summary ===")
 }
 
 func exitApp() {
