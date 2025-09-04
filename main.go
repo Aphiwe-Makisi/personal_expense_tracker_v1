@@ -200,14 +200,14 @@ func viewSummary() {
 
 	for cat, e := range categories {
 		sum := 0.0
+		if len(e) >= 2 {
+			s = "items"
+		}
 		for _, item := range e {
-			if len(item) >= 2 { //TODO: Fix BUG. This is the lenth of the category name, we want the number of items
-				s = "items"
-			}
 			amount := item["amount"].(float64)
 			sum += amount
 		}
-		fmt.Printf("• %v: R%.2f (%v %s)\n", cat, sum, len(cat), s)
+		fmt.Printf("• %v: R%.2f (%v %s)\n", cat, sum, len(e), s)
 	}
 
 	fmt.Printf("\nMost expensive: %v (R%.2f)\n", mostExp["name"], mostExp["amount"])
