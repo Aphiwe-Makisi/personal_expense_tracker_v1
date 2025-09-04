@@ -5,6 +5,7 @@ import (
 	"os"
 	"os/exec"
 	"runtime"
+	"sort"
 	"strings"
 )
 
@@ -169,7 +170,46 @@ func viewByCategory() {
 
 func viewSummary() {
 	clearTerminal()
+	categories := make(map[string][]map[string]interface{})
+	prices := []float64{}
+	totalExpenses := 0.0
+	s := "item"
+
+	for _, e := range expenses {
+		ec := e["category"].(string)
+		cost := e["amount"].(float64)
+		totalExpenses += cost
+		categories[ec] = append(categories[ec], e)
+		prices = append(prices, cost)
+	}
+
+	// calculate average of all expense
+	avg := totalExpenses / float64(len(expenses))
+	// sort the slice by amount
+	sort.Slice(expenses, func(i, j int) bool {
+		return expenses[i]["amount"].(float64) < expenses[j]["amount"].(float64)
+	})
+
+	mostExp := expenses[len(expenses)-1]
+
 	fmt.Println("=== Expense Summary ===")
+	fmt.Printf("Total Expense: R%.2f\n", totalExpenses)
+	fmt.Println("Categories:\n")
+
+	for cat, e := range categories {
+		sum := 0.0
+		for _, item := range e {
+			if len(item) >= 2 {
+				s = "items"
+			}
+			amount := item["amount"].(float64)
+			sum += amount
+		}
+		fmt.Printf("• %v: R%.2f (%v %s)\n", cat, sum, len(cat), s)
+	}
+
+	fmt.Printf("\nMost expensive: %v (R%.2f)\n", mostExp["name"], mostExp["amount"])
+	fmt.Printf("Average per expense: R%.2f\n", avg)
 }
 
 func exitApp() {
