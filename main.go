@@ -36,6 +36,8 @@ func main() {
 			viewByCategory()
 		case 4:
 			viewSummary()
+		case 5:
+			clearAllData()
 		case 6:
 			exitApp()
 			return
@@ -120,18 +122,18 @@ func viewAllExpenses() {
 		return
 	}
 
-	var total float32
+	var total float64
 
 	fmt.Println("============= All Expenses =============\n")
 	for i, e := range expenses {
-		if amount, ok := e["amount"].(float32); ok {
+		if amount, ok := e["amount"].(float64); ok {
 			total += amount
 		}
 		fmt.Printf("%v. %v -- R%.2f [%v]\n", i+1, e["name"], e["amount"], e["category"])
 	}
 
 	fmt.Println("\n=========================================")
-	fmt.Printf("Total: %v\n", total)
+	fmt.Printf("Total: %.2f\n", total)
 	fmt.Println("=========================================")
 }
 
@@ -199,7 +201,7 @@ func viewSummary() {
 	for cat, e := range categories {
 		sum := 0.0
 		for _, item := range e {
-			if len(item) >= 2 {
+			if len(item) >= 2 { //TODO: Fix BUG. This is the lenth of the category name, we want the number of items
 				s = "items"
 			}
 			amount := item["amount"].(float64)
@@ -224,7 +226,7 @@ func exitApp() {
 	`
 	fmt.Print("You are about to leave the Expense Tracker. Are you sure you want to leave? (y/n): ")
 	if _, err := fmt.Scanln(&confirmation); err != nil {
-		fmt.Println("Invalid menu option: %v", err)
+		fmt.Printf("Invalid menu option: %v", err)
 		return
 	}
 
@@ -238,6 +240,34 @@ func exitApp() {
 			clearTerminal()
 			main()
 			break
+		}
+	}
+}
+
+func clearAllData() {
+	clearTerminal() // cleanup the terminal
+	var confirmation string
+	invalid := false
+
+	for {
+		if invalid {
+			fmt.Printf("❌ Invalid input\n\n")
+		}
+
+		fmt.Println("⚠️  This will delete all your expenses permanently. ⚠️")
+		fmt.Print("Are you sure you want to continue? (y/n): ")
+		fmt.Scanln(&confirmation)
+		c := strings.ToLower(strings.TrimSpace(confirmation))
+
+		if c == "y" {
+			expenses = nil
+			return
+		} else if c == "n" {
+			clearTerminal()
+			return
+		} else {
+			clearTerminal()
+			invalid = true
 		}
 	}
 }
